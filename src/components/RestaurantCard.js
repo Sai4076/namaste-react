@@ -1,15 +1,34 @@
 import { IMG_CDN_URL } from "../utils/constants";
+import { useContext } from "react";
+import UserContext from "../utils/UserContext";
 
 const RestaurantCard = (props) => {
   const resData = props.resObj;
+  const {loggedInUser} = useContext(UserContext);
+  console.log(loggedInUser);
   return (
-    <div className="res-card" style={{backgroundColor:"#f0f0f0"}}>
-      <img className="res-logo" src={IMG_CDN_URL + resData.info.cloudinaryImageId} />
-      <h4>{resData.info.name}</h4>
+    <div className="m-4 p-4 w-[230px] rounded-lg bg-gray-100 hover:bg-gray-200">
+      <img className="w-55 rounded-lg" src={IMG_CDN_URL + resData.info.cloudinaryImageId} />
+      <h4 className="font-bold py-4 text-lg">{resData.info.name}</h4>
       <h4>{resData.info.cuisines.join(", ")}</h4>
       <h4>{resData.info.sla.deliveryTime} minutes</h4>
       <h4>{resData.info.avgRating} Rating</h4>
+      <h4>{loggedInUser}</h4>
     </div>
   );
 };
+
+export const withLocationLabel = (RestaurantCard) => {
+  return (props) => {
+    const resIsOpen = props.resObj;
+    return (
+      <div>
+        <h1 className="absolute bg-black text-white m-2 p-2 rounded-lg">{resIsOpen.info.areaName}</h1>
+        <RestaurantCard {...props}/>
+      </div>
+    );
+  };
+};
+
+
 export default RestaurantCard;
